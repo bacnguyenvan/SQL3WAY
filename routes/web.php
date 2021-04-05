@@ -15,4 +15,4 @@ Route::get('/','MainController@list');
 
 Route::get('/building','MainController@building');
 
-Route::get('/','TestController@test');
+Route::get('/test','TestController@test');
