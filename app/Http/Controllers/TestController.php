@@ -330,8 +330,68 @@ class TestController extends Controller
 
 
 		// VII.
-			 	
 
+			// 1. show name, address of building which contractor "cty xd so 6" construction
+			$buildings = DB::table('building')
+							-> select('building.name','building.address','contractor.name as contractor_name')
+							-> join('contractor','contractor.id','building.contractor_id')
+							-> where('contractor.name','cty xd so 6')
+							-> get();
+
+			// 2. show name, address of contractor construction building of 'can tho'
+			$contractors = DB::table('building')
+								-> distinct()
+								-> select('contractor.name','contractor.address','building.city')
+								-> join('contractor','contractor.id','building.contractor_id')
+								-> where('building.city','can tho')
+								-> get();
+
+			// dd($contractors);
+
+			//3 . What place of architects designed building 'khach san quoc te' in 'can tho'
+
+			$places = DB::table('architect')
+							-> select('architect.name','architect.place')
+							-> join('design','architect.id','design.architect_id')
+							-> leftJoin('building','building.id','design.building_id')
+							-> where('building.name','khach san quoc te')
+							-> get();
+
+			// 4. what workers was join building 'khach san quoc te' in 'can tho' in phase "15-12-1994" -> "31-12-1994", what is total date?
+			$from = date('y-m-d',strtotime('15-12-1994'));
+			$to = date('y-m-d',strtotime('31-12-1994'));
+
+			$works = DB::table('worker')
+						-> select('worker.name','work.date','work.total')
+						-> join('work','worker.id','work.worker_id')
+						-> leftJoin('building','work.building_id','building.id')
+						-> where('building.name','khach san quoc te')
+						-> where('building.city','can tho')
+						-> whereBetween('work.date',[$from, $to])
+						-> get();
+
+			// 5. what is name, birthday , of architects graduate 'tphcm' and designed at least 1 building, which has cost > 400
+
+			$architects = DB::table('building')
+							-> selectRaw('architect.name , architect.birthday, architect.place, COUNT(*) as totalBuilding')
+							-> join('design','building.id','design.building_id')
+							-> join('architect','design.architect_id','architect.id')
+							-> where('architect.place','tp hcm')
+							-> where('building.cost','>',400)
+							-> groupBy('design.architect_id')
+							-> having('totalBuilding','>',1)
+							-> get();
+
+		// VII. 3
+			// 1. What is building name which has cost tallest
+			$building = DB::table('building')
+							-> select('name','cost')
+							-> orderBy('cost','desc')
+							-> first();
+
+			dd($building);
+
+			// 2. 
 
 
 
