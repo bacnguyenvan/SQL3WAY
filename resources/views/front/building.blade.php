@@ -24,7 +24,7 @@
     <table class="table table-bordered">
         <tr>
             <th>No</th>
-            <th>Name</th>
+            <th>Name ( total architects )</th>
            
             <th>5 SAO (benefit >= 30)</th>
         </tr>
